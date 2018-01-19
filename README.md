@@ -51,4 +51,39 @@ $ curl -i localhost:49160
  Link: https://kubernetes.io/docs/reference/kubectl/cheatsheet/
  
  
+ # Main Important Points to remember
+ Step1: Create a Route53 Domain/SubDomain
+ 
+Step2: Create a Kubernetes Cluster
+
+Step3: Create a Dashboard UI/Monitoring Support
+
+Step4: kubectl cluster-info ( From this output, we can access the k8s Dashboard)
+
+For Ex:- https://api.local.get-kubes.tk/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy
+
+Now it will ask for username and password, Get this details by running below command
+
+$ kubectl config view
+
+username: admin
+
+Pass: 5tbb2OqfausAuvvFHP7FutktjO9kITSw
+
+Step5: Create a docker registry secretes by running the script, It will create a ecret file for docker registry
+
+Step6: Run the deployment.yaml file to deploy the container.
+
+Step7: Run the Service.yaml file for external access of the application
+
+Step8: Using the AWS Ec2 Instance Pub IP addess, We can access the application running inside the pod(K8s)
+
+http://13.126.195.132:4040/
+
+ 
+ 
+ 
+ 
+ 
+ 
  
