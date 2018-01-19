@@ -23,4 +23,29 @@ create_k8s_cluster() {
   ${NAME}
 }
 
-create_k8s_cluster
+delete_k8s_cluster () {
+  kops delete cluster \
+  $NAME \
+  --yes
+}
+
+action=$1
+case $action in
+  "create")
+  echo "Creating the new cluster ${NAME}"
+  create_k8s_cluster
+  echo "Your cluster ${NAME} is created"
+  ;;
+  "apply")
+  kops update cluster \
+  $NAME \
+  --yes
+  ;;
+  "delete")
+  echo "delete the cluster ${NAME}"
+  delete_k8s_cluster
+  ;;
+  *)
+  echo "Please choose one of these actions %w(create apply delete)"
+  ;;
+esac
