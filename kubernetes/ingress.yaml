@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ing-ssp-web-app
+spec:
+  tls:
+  - hosts:
+    - ssp-web-app.local.get-kubes.tk
+    secretName: tls
+  rules:
+    - host: ssp-web-app.local.get-kubes.tk
+      http:
+        paths:
+        - backend:
+            serviceName: svc-ssp-web-app
+            servicePort: 8080

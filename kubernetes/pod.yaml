@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ssp-web-app
+  labels:
+    app: ssp-web-app
+  namespace: ssp-dev
+spec:
+  containers:
+    - name: ssp-web-app
+      image: ssp25/ssp-web-app:latest
+      ports:
+        - containerPort: 8080
+        - hostport: 4040
+  imagePullSecrets:
+    - name: ssp25
