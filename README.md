@@ -78,6 +78,8 @@ Step7: Run the Service.yaml file for external access of the application
 
 Step8: Using the AWS Ec2 Instance Pub IP addess, We can access the application running inside the pod(K8s)
 
+Step9: To Know on which node, Pod is running, We can directly check in the Dashboard-->Namespace-->Pod ( Also need to add the port in Security Groups)
+
 http://13.126.195.132:4040/
 
  
