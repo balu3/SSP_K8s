@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: stupid-node-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: stupid-node
+    spec:
+      containers:
+      - name: stupid-node
+        image: ssp25/ssp-web-node:develop
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9090
+# vim: set ts=2 expandtab!:

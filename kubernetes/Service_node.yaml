@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stupid-node
+  labels:
+    app: stupid-node
+spec:
+  selector:
+    app: stupid-node
+  ports:
+  - port: 9090
+    protocol: TCP
+    nodePort: 30062
+  type: LoadBalancer
