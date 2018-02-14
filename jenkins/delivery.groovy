@@ -33,6 +33,17 @@ def notify(message, color = '#C9C9C9') {
     slackSend(
             channel: settings.slackChannel,
             message: updatedMessage,
-            color: color
+            color: good
+    )
+}
+
+def notifyFailure(message) {
+    def settings = settings()
+    def updatedMessage = "(<${env.BUILD_URL}|Build>) `${JOB_NAME}:${env.BUILD_NUMBER}`\n Failed \n${message}"
+    echo updatedMessage
+    slackSend(
+            color: 'danger',
+            channel: settings.slackChannelError,
+            message: updatedMessage
     )
 }
