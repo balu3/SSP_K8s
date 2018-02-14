@@ -26,7 +26,7 @@ COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
 SEE: DevOps-chapter/delivery
  */
 def delivery
-node ('onpremise') {
+node {
     checkout scm
 
     stage(name: 'delivery') {
