@@ -14,8 +14,8 @@ SECRETS_HOME=~/.ssh
 SSH_KEY=${SECRETS_HOME}/cicd_servers.pub
 
 # These are needed by kops commands
-export NAME=local.get-kubes.tk
-export DOMAIN=get-kubes.tk
+export NAME=k8s.sspcloudpro.co.in
+export DOMAIN=sspcloudpro.co.in
 export KOPS_STATE_STORE=s3://${BUCKET_NAME}
 export AWS_S3_BUCKET=${BUCKET_NAME}
 #export MASTER_SIZE=${MASTER_SIZE:-t2.micro}

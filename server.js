@@ -3,13 +3,18 @@
 const express = require('express');
 
 // Constants
-const PORT = 8080;
+const PORT = 9090;
 const HOST = '0.0.0.0';
 
 // App
 const app = express();
 app.get('/', (req, res) => {
-  res.send('Hello Guys \n This is Shiva Salugu\n Your K8s Trainer');
+  res.send('<!DOCTYPE html>
+<html>
+<body bgcolor="#E6E6FA">
+<h1>Hello world!</h1>
+</body>
+</html>'
 });
 
 app.listen(PORT, HOST);

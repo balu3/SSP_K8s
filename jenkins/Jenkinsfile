@@ -1,0 +1,54 @@
+def doBuild(delivery) {
+    def settings = delivery.settings()
+    //cluster settings
+        def clusterSettings = readYaml file: 'jenkins/cluster.yaml'
+        def context = clusterSettings.context
+        def namespace = clusterSettings.namespace
+
+  stage('build') {
+        def image = docker.build("ssp25/ssp-web-node")
+        image.push(delivery.branchTag())
+        image.push(delivery.branchAndBuildTag())
+    }
+
+ if('develop' == delivery.branchTag()) {
+        stage('deploy') {
+            docker.image(settings.kubectlImage).inside {
+              delivery.deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${delivery.branchAndBuildTag()}")
+            }
+        }
+      }
+  }
+
+
+/*
+COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
+SEE: DevOps-chapter/delivery
+ */
+def delivery
+node ('onpremise') {
+    checkout scm
+
+    stage(name: 'delivery') {
+      delivery = load 'jenkins/delivery.groovy'
+      sh 'ls .'
+    }
+
+    try {
+       delivery.notify("Starting")
+        withCredentials([usernamePassword(credentialsId: 'ssp-docker-hub', passwordVariable: 'dockerhubPass', usernameVariable: 'dockerhubUser')]) {
+            sh "docker login -u ${dockerhubUser} -p ${dockerhubPass}"
+        }
+      doBuild(delivery) // You implement doBuild
+
+     delivery.notify("SUCCESS")
+    } catch (e) {
+        currentBuild.result = "FAILED"
+        echo "${e.getClass().getName()} - ${e.getMessage()}"
+    delivery.notifyFailure("${e.getClass().getName()} - ${e.getMessage()}")
+        throw e
+    }
+}
+/*
+END COMMONS JOB TEMPLATE
+ */
