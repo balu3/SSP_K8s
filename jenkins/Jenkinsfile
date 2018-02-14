@@ -35,17 +35,17 @@ node {
     }
 
     try {
-       delivery.notify("Starting")
+    //   delivery.notify("Starting")
         withCredentials([usernamePassword(credentialsId: 'ssp-docker-hub', passwordVariable: 'dockerhubPass', usernameVariable: 'dockerhubUser')]) {
             sh "docker login -u ${dockerhubUser} -p ${dockerhubPass}"
         }
       doBuild(delivery) // You implement doBuild
 
-     delivery.notify("SUCCESS")
+//     delivery.notify("SUCCESS")
     } catch (e) {
         currentBuild.result = "FAILED"
         echo "${e.getClass().getName()} - ${e.getMessage()}"
-    delivery.notifyFailure("${e.getClass().getName()} - ${e.getMessage()}")
+  //  delivery.notifyFailure("${e.getClass().getName()} - ${e.getMessage()}")
         throw e
     }
 }
