@@ -26,7 +26,7 @@ COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
 SEE: DevOps-chapter/delivery
  */
 def delivery
-node {
+node("ssp-mac") {
     checkout scm
 
     stage(name: 'delivery') {
