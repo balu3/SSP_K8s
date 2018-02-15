@@ -6,8 +6,8 @@
 COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
 SEE: DevOps-chapter/delivery
  */
-node("ssp-mac") {
-
+node ('ssp-mac') {
+     deleteDir()
     stage(name: 'checkout repo') {
       checkout scm
   //    checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'delivery']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:sspper/pipeline-jenkins.git']]])
