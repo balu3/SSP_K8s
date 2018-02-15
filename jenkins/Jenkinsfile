@@ -1,9 +1,29 @@
 @Library('pipeline-jenkins')
 
-def del = new devops.deliver()
 
 
-def doBuild(del) {
+/*
+COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
+SEE: DevOps-chapter/delivery
+ */
+node("ssp-mac") {
+    stage(name: 'checkout repo') {
+      checkout scm
+  //    checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'delivery']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:sspper/pipeline-jenkins.git']]])
+  //    del = load 'dpipeline-jenkins/delivery.groovy'
+    //  sh '/bin/ls .'
+    def del = new devops.delivery()
+    }
+
+    try {
+    //   delivery.notify("Starting")
+        withCredentials([usernamePassword(credentialsId: 'ssp-docker-hub', passwordVariable: 'dockerhubPass', usernameVariable: 'dockerhubUser')]) {
+            sh "/usr/local/bin/docker login -u ${dockerhubUser} -p ${dockerhubPass}"
+        }
+
+//    doBuild(del) // You implement doBuild
+
+
 def settings = del.settings()
 //cluster settings
    def clusterSettings = readYaml file: 'jenkins/cluster.yaml'
@@ -23,30 +43,6 @@ if('develop' == del.branchTag()) {
        }
    }
  }
-
-  }
-
-/*
-COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
-SEE: DevOps-chapter/delivery
- */
-node("ssp-mac") {
-
-
-    stage(name: 'checkout repo') {
-      checkout scm
-  //    checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'delivery']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:sspper/pipeline-jenkins.git']]])
-  //    del = load 'dpipeline-jenkins/delivery.groovy'
-    //  sh '/bin/ls .'
-    }
-
-    try {
-    //   delivery.notify("Starting")
-        withCredentials([usernamePassword(credentialsId: 'ssp-docker-hub', passwordVariable: 'dockerhubPass', usernameVariable: 'dockerhubUser')]) {
-            sh "/usr/local/bin/docker login -u ${dockerhubUser} -p ${dockerhubPass}"
-        }
-
-    doBuild(del) // You implement doBuild
 
 
 //     delivery.notify("SUCCESS")
