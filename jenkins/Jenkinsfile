@@ -53,7 +53,7 @@ stage('build') {
 if('develop' == branchTag()) {
  stage('deploy') {
     // docker.image(settings.kubectlImage).inside {
-       deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${branchAndBuildTag()}")
+       deploymentUpdateSspWebNode("minikube", "ssp-dev", "ssp25/ssp-web-node:${branchAndBuildTag()}")
   //   }
  }
 }
