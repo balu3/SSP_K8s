@@ -32,8 +32,8 @@ def settings = settings()
  //def namespace = clusterSettings.namespace
  def context
  def namespace
- context: minikube
- namespace: ssp-dev
+ context: 'minikube'
+ namespace: 'ssp-dev'
 
 
 
