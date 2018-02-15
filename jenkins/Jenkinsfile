@@ -15,7 +15,7 @@ def branchTag() {
 }
 
 def deploymentUpdateSspWebNode(context, namespace, newVersion) {
-    sh "/usr/local/bin/kubectl set image deployment stupid-node-deplpoyment stupid-node=${newVersion} --context=${context} --namespace=${namespace}"
+    sh "/usr/local/bin/kubectl set image deployment stupid-node-deployment stupid-node=${newVersion} --context=${context} --namespace=${namespace}"
 
 
   //  sh "delivery/pearl-squad/artisan-mobile-bff/env/reload-secret.sh ${namespace} ${context}"
