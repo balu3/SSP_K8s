@@ -31,13 +31,13 @@ node("ssp-mac") {
 
     stage(name: 'delivery') {
       delivery = load 'jenkins/delivery.groovy'
-      sh 'ls .'
+      sh '/bin/ls .'
     }
 
     try {
     //   delivery.notify("Starting")
         withCredentials([usernamePassword(credentialsId: 'ssp-docker-hub', passwordVariable: 'dockerhubPass', usernameVariable: 'dockerhubUser')]) {
-            sh "docker login -u ${dockerhubUser} -p ${dockerhubPass}"
+            sh "/usr/local/bin/docker login -u ${dockerhubUser} -p ${dockerhubPass}"
         }
       doBuild(delivery) // You implement doBuild
 
