@@ -1,7 +1,25 @@
-//def doBuild(del) {
+def doBuild(del) {
+def settings = del.settings()
+//cluster settings
+   def clusterSettings = readYaml file: 'jenkins/cluster.yaml'
+   def context = clusterSettings.context
+   def namespace = clusterSettings.namespace
 
-  //}
+stage('build') {
+   def image = docker.build("ssp25/ssp-web-node")
+   image.push(del.branchTag())
+   image.push(del.branchAndBuildTag())
+}
 
+if('develop' == del.branchTag()) {
+   stage('deploy') {
+       docker.image(settings.kubectlImage).inside {
+         del.deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${delivery.branchAndBuildTag()}")
+       }
+   }
+ }
+
+  }
 
 /*
 COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
@@ -12,7 +30,8 @@ node("ssp-mac") {
     checkout scm
 
     stage(name: 'delivery') {
-      del = load 'jenkins/delivery.groovy'
+      checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'delivery']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:sspper/pipeline-jenkins.git']]])
+      del = load 'dpipeline-jenkins/delivery.groovy'
       sh '/bin/ls .'
     }
 
@@ -22,26 +41,8 @@ node("ssp-mac") {
             sh "/usr/local/bin/docker login -u ${dockerhubUser} -p ${dockerhubPass}"
         }
 
-  //    doBuild(del) // You implement doBuild
-       def settings = del.settings()
-      //cluster settings
-          def clusterSettings = readYaml file: 'jenkins/cluster.yaml'
-          def context = clusterSettings.context
-          def namespace = clusterSettings.namespace
+    doBuild(del) // You implement doBuild
 
-    stage('build') {
-          def image = docker.build("ssp25/ssp-web-node")
-          image.push(del.branchTag())
-          image.push(del.branchAndBuildTag())
-      }
-
-   if('develop' == del.branchTag()) {
-          stage('deploy') {
-              docker.image(settings.kubectlImage).inside {
-                del.deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${delivery.branchAndBuildTag()}")
-              }
-          }
-        }
 
 //     delivery.notify("SUCCESS")
     } catch (e) {
