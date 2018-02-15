@@ -1,6 +1,31 @@
+def settings() {
+    [
+            'kubectlImage' : 'ssp25/ssp-kubectl:L1',
+            'slackChannel' : 'devops-hyd-test',
+            'slackChannelError' : 'devops-hyd-test'
+    ]
+}
 
-def doBuild(delivery) {
-def settings = delivery.settings()
+def branchAndBuildTag() {
+    return "${env.BRANCH_NAME}${env.BUILD_NUMBER}"
+}
+
+def branchTag() {
+    return "${env.BRANCH_NAME}"
+}
+
+def deploymentUpdateSspWebNode(context, namespace, newVersion) {
+    def cmd = "kubectl set image deployment/stupid-node-deployment stupid-node-deployment=${newVersion} --context=${context} --namespace=${namespace}"
+    notify(cmd)
+
+  //  sh "delivery/pearl-squad/artisan-mobile-bff/env/reload-secret.sh ${namespace} ${context}"
+
+    sh cmd
+}
+
+
+def doBuild() {
+def settings = settings()
 //cluster settings
  def clusterSettings = readYaml file: 'jenkins/cluster.yaml'
  def context = clusterSettings.context
@@ -8,14 +33,14 @@ def settings = delivery.settings()
 
 stage('build') {
  def image = docker.build("ssp25/ssp-web-node")
- image.push(delivery.branchTag())
- image.push(delivery.branchAndBuildTag())
+ image.push(branchTag())
+ image.push(branchAndBuildTag())
 }
 
-if('develop' == delivery.branchTag()) {
+if('develop' == branchTag()) {
  stage('deploy') {
      docker.image(settings.kubectlImage).inside {
-       delivery.deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${delivery.branchAndBuildTag()}")
+       deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${branchAndBuildTag()}")
      }
  }
 }
@@ -25,7 +50,6 @@ if('develop' == delivery.branchTag()) {
 COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
 SEE: DevOps-chapter/delivery
  */
- def delivery
 node ('ssp-mac') {
      deleteDir()
 
@@ -34,21 +58,21 @@ node ('ssp-mac') {
       stage("Code Checkout")
         {
         checkout scm
-        delivery = load 'jenkins/mobile.groovy'
+        //delivery = load 'jenkins/mobile.groovy'
         }
 
-    //   delivery.notify("Starting")
+    //   notify("Starting")
         withCredentials([usernamePassword(credentialsId: 'ssp-docker-hub', passwordVariable: 'dockerhubPass', usernameVariable: 'dockerhubUser')]) {
             sh "/usr/local/bin/docker login -u ${dockerhubUser} -p ${dockerhubPass}"
         }
 
-  doBuild(delivery) // You implement doBuild
+  doBuild() // You implement doBuild
 
-//     delivery.notify("SUCCESS")
+//     notify("SUCCESS")
     } catch (e) {
         currentBuild.result = "FAILED"
         echo "${e.getClass().getName()} - ${e.getMessage()}"
-  //  delivery.notifyFailure("${e.getClass().getName()} - ${e.getMessage()}")
+  //  notifyFailure("${e.getClass().getName()} - ${e.getMessage()}")
         throw e
     }
 }
