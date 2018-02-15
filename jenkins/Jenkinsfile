@@ -15,7 +15,7 @@ stage('build') {
 if('develop' == delivery.branchTag()) {
  stage('deploy') {
      docker.image(settings.kubectlImage).inside {
-       del.deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${delivery.branchAndBuildTag()}")
+       delivery.deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${delivery.branchAndBuildTag()}")
      }
  }
 }
@@ -42,7 +42,7 @@ node ('ssp-mac') {
             sh "/usr/local/bin/docker login -u ${dockerhubUser} -p ${dockerhubPass}"
         }
 
-  doBuild(del) // You implement doBuild
+  doBuild(delivery) // You implement doBuild
 
 //     delivery.notify("SUCCESS")
     } catch (e) {
