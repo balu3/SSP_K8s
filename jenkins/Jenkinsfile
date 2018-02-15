@@ -56,7 +56,7 @@ if('develop' == branchTag()) {
 COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
 SEE: DevOps-chapter/delivery
  */
-node ('ssp-mac') {
+node ('ssp-aws') {
      deleteDir()
 
     try {
