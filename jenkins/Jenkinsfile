@@ -1,3 +1,8 @@
+@Library('pipeline-jenkins')
+
+def del = new devops.deliver()
+
+
 def doBuild(del) {
 def settings = del.settings()
 //cluster settings
@@ -25,14 +30,14 @@ if('develop' == del.branchTag()) {
 COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
 SEE: DevOps-chapter/delivery
  */
-def del
 node("ssp-mac") {
-    checkout scm
 
-    stage(name: 'delivery') {
-      checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'delivery']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:sspper/pipeline-jenkins.git']]])
-      del = load 'dpipeline-jenkins/delivery.groovy'
-      sh '/bin/ls .'
+
+    stage(name: 'checkout repo') {
+      checkout scm
+  //    checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'delivery']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:sspper/pipeline-jenkins.git']]])
+  //    del = load 'dpipeline-jenkins/delivery.groovy'
+    //  sh '/bin/ls .'
     }
 
     try {
