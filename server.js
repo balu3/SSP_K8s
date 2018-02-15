@@ -9,7 +9,7 @@ const HOST = '0.0.0.0';
 // App
 const app = express();
 app.get('/', (req, res) => {
-  res.send('Hello Guys'+ \n +'Welcome to DevOps Workshop'+ \n +'SSPCLOUDPRO')
+  res.send('Hello Guys'+'\n' +'Welcome to DevOps Workshop'+ '\n' +'SSPCLOUDPRO')
 });
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);

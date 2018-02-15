@@ -42,9 +42,9 @@ stage('build') {
  //def image = docker.build("ssp25/ssp-web-node")
  sh " cd $WORKSPACE"
  sh "/usr/local/bin/docker build -t ssp25/ssp-web-node:${branchAndBuildTag()} ."
- sh "/usr/local/bin/docker build -t ssp25/ssp-web-node:${branchTag()} ."
+ //sh "/usr/local/bin/docker build -t ssp25/ssp-web-node:${branchTag()} ."
  sh "/usr/local/bin/docker push ssp25/ssp-web-node:${branchAndBuildTag()}"
- sh "/usr/local/bin/docker push ssp25/ssp-web-node:${branchTag()}"
+ //sh "/usr/local/bin/docker push ssp25/ssp-web-node:${branchTag()}"
 
  //image.push(branchTag())
  //image.push(branchAndBuildTag())
