@@ -7,12 +7,13 @@ COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
 SEE: DevOps-chapter/delivery
  */
 node("ssp-mac") {
+
     stage(name: 'checkout repo') {
       checkout scm
   //    checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'delivery']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:sspper/pipeline-jenkins.git']]])
   //    del = load 'dpipeline-jenkins/delivery.groovy'
     //  sh '/bin/ls .'
-    def del = new devops.delivery()
+
     }
 
     try {
@@ -23,8 +24,8 @@ node("ssp-mac") {
 
 //    doBuild(del) // You implement doBuild
 
-
-def settings = del.settings()
+  def del = new devops.delivery()
+  def settings = del.settings()
 //cluster settings
    def clusterSettings = readYaml file: 'jenkins/cluster.yaml'
    def context = clusterSettings.context
