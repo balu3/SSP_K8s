@@ -1,24 +1,6 @@
-def doBuild(del) {
-    def settings = del.settings()
-    //cluster settings
-        def clusterSettings = readYaml file: 'jenkins/cluster.yaml'
-        def context = clusterSettings.context
-        def namespace = clusterSettings.namespace
+//def doBuild(del) {
 
-  stage('build') {
-        def image = docker.build("ssp25/ssp-web-node")
-        image.push(del.branchTag())
-        image.push(del.branchAndBuildTag())
-    }
-
- if('develop' == del.branchTag()) {
-        stage('deploy') {
-            docker.image(settings.kubectlImage).inside {
-              del.deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${delivery.branchAndBuildTag()}")
-            }
-        }
-      }
-  }
+  //}
 
 
 /*
@@ -39,7 +21,27 @@ node("ssp-mac") {
         withCredentials([usernamePassword(credentialsId: 'ssp-docker-hub', passwordVariable: 'dockerhubPass', usernameVariable: 'dockerhubUser')]) {
             sh "/usr/local/bin/docker login -u ${dockerhubUser} -p ${dockerhubPass}"
         }
-      doBuild(del) // You implement doBuild
+
+  //    doBuild(del) // You implement doBuild
+       def settings = del.settings()
+      //cluster settings
+          def clusterSettings = readYaml file: 'jenkins/cluster.yaml'
+          def context = clusterSettings.context
+          def namespace = clusterSettings.namespace
+
+    stage('build') {
+          def image = docker.build("ssp25/ssp-web-node")
+          image.push(del.branchTag())
+          image.push(del.branchAndBuildTag())
+      }
+
+   if('develop' == del.branchTag()) {
+          stage('deploy') {
+              docker.image(settings.kubectlImage).inside {
+                del.deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${delivery.branchAndBuildTag()}")
+              }
+          }
+        }
 
 //     delivery.notify("SUCCESS")
     } catch (e) {
