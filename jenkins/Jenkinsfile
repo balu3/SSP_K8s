@@ -28,8 +28,14 @@ def doBuild() {
 def settings = settings()
 //cluster settings
  //def clusterSettings = readYaml file: 'jenkins/cluster.yaml'
- def context = minikube
- def namespace = ssp-dev
+ //def context = clusterSettings.context
+ //def namespace = clusterSettings.namespace
+ def context
+ def namespace
+ context: minikube
+ namespace: ssp-dev
+
+
 
 stage('build') {
  def image = docker.build("ssp25/ssp-web-node")
