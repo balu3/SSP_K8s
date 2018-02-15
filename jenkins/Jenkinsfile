@@ -1,5 +1,5 @@
-def doBuild(delivery) {
-    def settings = delivery.settings()
+def doBuild(del) {
+    def settings = del.settings()
     //cluster settings
         def clusterSettings = readYaml file: 'jenkins/cluster.yaml'
         def context = clusterSettings.context
@@ -7,14 +7,14 @@ def doBuild(delivery) {
 
   stage('build') {
         def image = docker.build("ssp25/ssp-web-node")
-        image.push(delivery.branchTag())
-        image.push(delivery.branchAndBuildTag())
+        image.push(del.branchTag())
+        image.push(del.branchAndBuildTag())
     }
 
- if('develop' == delivery.branchTag()) {
+ if('develop' == del.branchTag()) {
         stage('deploy') {
             docker.image(settings.kubectlImage).inside {
-              delivery.deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${delivery.branchAndBuildTag()}")
+              del.deploymentUpdateSspWebNode(context, namespace, "ssp25/ssp-web-node:${delivery.branchAndBuildTag()}")
             }
         }
       }
@@ -25,12 +25,12 @@ def doBuild(delivery) {
 COMMONS JOB TEMPLATE V0.1 (subdirectoryCheckout, scmFirst)
 SEE: DevOps-chapter/delivery
  */
-def delivery
+def del
 node("ssp-mac") {
     checkout scm
 
     stage(name: 'delivery') {
-      delivery = load 'jenkins/delivery.groovy'
+      del = load 'jenkins/delivery.groovy'
       sh '/bin/ls .'
     }
 
@@ -39,7 +39,7 @@ node("ssp-mac") {
         withCredentials([usernamePassword(credentialsId: 'ssp-docker-hub', passwordVariable: 'dockerhubPass', usernameVariable: 'dockerhubUser')]) {
             sh "/usr/local/bin/docker login -u ${dockerhubUser} -p ${dockerhubPass}"
         }
-      doBuild(delivery) // You implement doBuild
+      doBuild(del) // You implement doBuild
 
 //     delivery.notify("SUCCESS")
     } catch (e) {
