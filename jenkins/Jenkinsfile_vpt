@@ -95,18 +95,18 @@ node ('ssp') {
         checkout scm
         }
 
-        notify(" Job Started ")
+       // notify(" Job Started ")
         withCredentials([usernamePassword(credentialsId: 'ssp-docker-hub', passwordVariable: 'dockerhubPass', usernameVariable: 'dockerhubUser')]) {
             sh "/usr/local/bin/docker login -u ${dockerhubUser} -p ${dockerhubPass}"
         }
 // Calling this method for build and push and deploy the docker image.
   doBuild()
 
-       notify("Job is SUCCESS")
+     //  notify("Job is SUCCESS")
     } catch (e) {
         currentBuild.result = "FAILED"
         echo "${e.getClass().getName()} - ${e.getMessage()}"
-        notifyFailure("${e.getClass().getName()} - ${e.getMessage()}")
+       // notifyFailure("${e.getClass().getName()} - ${e.getMessage()}")
         throw e
     }
 }
