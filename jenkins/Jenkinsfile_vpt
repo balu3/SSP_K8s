@@ -60,13 +60,13 @@ def settings = settings()
 
 
 
-stage('build') {
+stage('Build Docker Image') {
  //def image = docker.build("ssp25/ssp-web-node")
  sh " cd $WORKSPACE"
  sh "/usr/local/bin/docker build -t ssp25/vpt-web-node:${branchAndBuildTag()} ."
  //sh "/usr/local/bin/docker build -t ssp25/ssp-web-node:${branchTag()} ."
 }
-stage('build') {
+stage('Push Docker Image') {
   sh " cd $WORKSPACE"
   sh "/usr/local/bin/docker push ssp25/vpt-web-node:${branchAndBuildTag()}"
  //sh "/usr/local/bin/docker push ssp25/ssp-web-node:${branchTag()}"
