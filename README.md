@@ -84,6 +84,9 @@ http://13.126.195.132:4040/
 
  
  
+ # Note: If any errors, while creating cluster, please refer below.
+ 
+ https://github.com/kubernetes/kops/issues/2294
  
  
  
