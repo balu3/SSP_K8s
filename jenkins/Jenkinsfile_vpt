@@ -85,7 +85,7 @@ if('develop' == branchTag()) {
 
 // Our Main Job starts from here....!!!
 
-node ('ssp-mac') {
+node ('ssp') {
      deleteDir()
 
     try {
