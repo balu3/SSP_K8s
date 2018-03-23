@@ -11,15 +11,15 @@ source .env.sh
 create_k8s_cluster() {
   kops create cluster  \
   --node-count 2 \
-  --zones ap-south-1a \
-  --master-zones ap-south-1a \
+  --zones us-east-1a \
+  --master-zones us-east-1a \
   --node-size t2.micro \
   --master-size t2.micro \
   --kubernetes-version 1.4.4 \
   --network-cidr 172.31.0.0/16 \
-  --vpc vpc-37bf9a5e \
+  --vpc vpc-873abffc \
   --ssh-public-key ${SSH_KEY} \
-  --image ami-5d055232 \
+  --image ami-66506c1c \
   ${NAME}
 }
 

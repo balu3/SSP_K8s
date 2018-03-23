@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 OSFAMILY=$(uname)
-BUCKET_NAME=sspucket
+BUCKET_NAME=sspucket1
 K8S_VERSION=1.7.1
 NODE_COUNT=2
 

@@ -18,7 +18,7 @@ def branchTag() {
 
 // Deploy Container
 def deploymentUpdateSspWebNode(context, namespace, newVersion) {
-    def cmd = "kubectl set image deployment/stupid-node-deployment stupid-node-deployment=${newVersion} --context=${context} --namespace=${namespace}"
+    def cmd = "kubectl set image deployment/vpt-node-deployment vpt-node-deployment=${newVersion} --context=${context} --namespace=${namespace}"
     notify(cmd)
 
   //  sh "delivery/pearl-squad/artisan-mobile-bff/env/reload-secret.sh ${namespace} ${context}"
