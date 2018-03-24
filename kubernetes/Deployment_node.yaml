@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: vpt-node-deployment
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
